@@ -23,11 +23,11 @@ public class Block {
     }
 
     public String calculateHash() {
-        StringBuilder txData = new StringBuilder();
-        for (Transaction tx : transactions) {
-            txData.append(tx.calculateHash());
-        }
-        return CryptoUtil.sha256(previousHash + timestamp + txData + nonce);
+        return CryptoUtil.sha256(previousHash + timestamp + getMerkleRoot() + nonce);
+    }
+
+    public String getMerkleRoot() {
+        return MerkleTree.computeRoot(transactions);
     }
 
     /** Proof-of-work: increments nonce until the hash has `difficulty` leading zero hex digits. */
