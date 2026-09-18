@@ -21,6 +21,19 @@ public class Transaction {
         this.timestamp = System.currentTimeMillis();
     }
 
+    /**
+     * Reconstructs a transaction with a known timestamp and signature. Used when restoring a
+     * transaction from persisted storage, where the original signature must be kept as-is
+     * (the sender's private key needed to re-sign it isn't available at load time).
+     */
+    public Transaction(String sender, String recipient, double amount, long timestamp, String signature) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.amount = amount;
+        this.timestamp = timestamp;
+        this.signature = signature;
+    }
+
     public String getSender() {
         return sender;
     }

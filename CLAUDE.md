@@ -26,4 +26,4 @@ Single-module educational blockchain: in-memory, single-process, no networking/p
   - `getBalance(address)` is **not** tracked incrementally — it recomputes by replaying every transaction in every block on each call.
   - `isChainValid()` re-derives each block's hash, checks the `previousHash` linkage, re-validates all transaction signatures, and re-checks the proof-of-work target.
 
-`build.gradle` declares a `gson` dependency that is currently unused by any source file (no serialization/persistence exists yet).
+`com.tiemens.myblockchain.persistence.BlockchainStorage` saves a `Blockchain` to a JSON file and loads it back, using the `gson` dependency declared in `build.gradle` (previously unused). Loaded blocks/transactions preserve their original timestamp, nonce, hash and signature rather than being re-mined or re-signed; call `isChainValid()` after loading to confirm the file wasn't corrupted. The `*Data` classes in that package are plain mutable DTOs used only for (de)serialization, kept separate from the immutable domain classes.

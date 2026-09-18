@@ -22,6 +22,24 @@ public class Block {
         this.hash = calculateHash();
     }
 
+    /**
+     * Reconstructs a block exactly as it was persisted, preserving its original timestamp,
+     * nonce and hash rather than re-mining it. Used when loading a chain from storage.
+     */
+    public static Block restore(List<Transaction> transactions, String previousHash,
+                                 long timestamp, long nonce, String hash) {
+        return new Block(transactions, previousHash, timestamp, nonce, hash);
+    }
+
+    private Block(List<Transaction> transactions, String previousHash,
+                   long timestamp, long nonce, String hash) {
+        this.timestamp = timestamp;
+        this.transactions = new ArrayList<>(transactions);
+        this.previousHash = previousHash;
+        this.nonce = nonce;
+        this.hash = hash;
+    }
+
     public String calculateHash() {
         return CryptoUtil.sha256(previousHash + timestamp + getMerkleRoot() + nonce);
     }

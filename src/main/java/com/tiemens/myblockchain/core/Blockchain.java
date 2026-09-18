@@ -17,6 +17,26 @@ public class Blockchain {
         chain.add(createGenesisBlock());
     }
 
+    /**
+     * Reconstructs a blockchain from persisted state (e.g. loaded from disk) instead of
+     * starting a fresh chain with a new genesis block.
+     */
+    public static Blockchain restore(int difficulty, double miningReward,
+                                      List<Block> chain, List<Transaction> pendingTransactions) {
+        return new Blockchain(difficulty, miningReward, chain, pendingTransactions);
+    }
+
+    private Blockchain(int difficulty, double miningReward,
+                        List<Block> chain, List<Transaction> pendingTransactions) {
+        if (chain == null || chain.isEmpty()) {
+            throw new IllegalArgumentException("Restored chain must contain at least the genesis block");
+        }
+        this.difficulty = difficulty;
+        this.miningReward = miningReward;
+        this.chain.addAll(chain);
+        this.pendingTransactions.addAll(pendingTransactions);
+    }
+
     private Block createGenesisBlock() {
         return new Block(Collections.emptyList(), "0");
     }
@@ -96,5 +116,9 @@ public class Blockchain {
 
     public int getDifficulty() {
         return difficulty;
+    }
+
+    public double getMiningReward() {
+        return miningReward;
     }
 }
